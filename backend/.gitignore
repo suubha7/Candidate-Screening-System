@@ -7,3 +7,5 @@ interview.db
 uploads/
 tempCodeRunnerFile.py
 test.py
+books/
+faiss_index/

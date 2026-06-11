@@ -33,3 +33,4 @@ class InterviewSession(Base):
     role_id = Column(Integer)
 
     status = Column(String)
+
