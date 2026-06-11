@@ -13,3 +13,23 @@ class Candidate(Base):
     resume_path = Column(String)
     resume_text = Column(Text)
     skills = Column(Text)
+
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    id = Column(Integer, primary_key=True)
+
+    role_name = Column(String)
+    required_skills = Column(Text)
+
+
+class InterviewSession(Base):
+    __tablename__ = "interview_sessions"
+
+    id = Column(Integer, primary_key=True)
+
+    candidate_id = Column(Integer)
+    role_id = Column(Integer)
+
+    status = Column(String)
