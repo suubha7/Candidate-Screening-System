@@ -1,4 +1,4 @@
-from services.llm_service import get_llm
+from app.services.llm_service import get_llm
 
 def generate_questions(role, resume_skills, context):
     llm = get_llm()

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Text
+from sqlalchemy import Column, String, Integer, Text, ForeignKey
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -28,9 +28,26 @@ class InterviewSession(Base):
     __tablename__ = "interview_sessions"
 
     id = Column(Integer, primary_key=True)
+    candidate_id = Column(
+        Integer,
+        ForeignKey("candidates.id")
+    )
 
-    candidate_id = Column(Integer)
-    role_id = Column(Integer)
-
+    role_id = Column(
+        Integer,
+        ForeignKey("roles.id")
+    )
     status = Column(String)
 
+class QuestionAnswer(Base):
+    __tablename__ = "question_answers"
+
+    id = Column(Integer, primary_key=True)
+
+    session_id = Column(
+        Integer,
+        ForeignKey("interview_sessions.id")
+    )
+
+    question = Column(Text)
+    answer = Column(Text)
