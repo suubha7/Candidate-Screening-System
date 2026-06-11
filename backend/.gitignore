@@ -5,3 +5,5 @@ venv/
 .env
 interview.db
 uploads/
+tempCodeRunnerFile.py
+test.py
