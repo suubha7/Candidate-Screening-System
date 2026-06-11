@@ -1,31 +1,52 @@
-# Candidate Screening System
+# AI-Powered Candidate Screening System
 
-An AI-powered Candidate Screening System that automates resume processing and skill extraction for technical interview preparation.
+## Overview
 
-## Features Implemented
+This project is an AI-powered role-based candidate screening system that simulates a structured technical interview using Retrieval-Augmented Generation (RAG).
 
-* Resume upload using FastAPI
-* PDF file storage
-* Resume text extraction using PyMuPDF
-* Technical skill extraction using LLMs
-* Candidate data persistence using SQLite
-* Swagger API documentation
+The system dynamically generates interview questions based on:
+
+* Candidate Resume
+* Selected Job Role
+* Role-Specific Knowledge Base
+
+The application evaluates candidate responses, generates follow-up questions, stores interview sessions, and produces an AI-generated interview report.
 
 ---
 
-## Current Workflow
+## Features
 
-```text
-Candidate Uploads Resume
-        ↓
-Save PDF
-        ↓
-Extract Resume Text
-        ↓
-Extract Technical Skills
-        ↓
-Store Candidate Information
-```
+### Resume Processing
+
+* Upload resume in PDF format
+* Extract resume text
+* Extract technical skills using LLM
+
+### Role Management
+
+* Create job roles
+* Store required skills for each role
+
+### Candidate Screening
+
+* Start interview sessions
+* Generate role-specific interview questions
+* Generate dynamic follow-up questions
+* Store questions and answers
+
+### RAG Pipeline
+
+* Load role-specific books
+* Chunk documents
+* Generate embeddings
+* Store embeddings in FAISS
+* Retrieve relevant context for question generation
+
+### Interview Evaluation
+
+* Analyze candidate responses
+* Generate interview summary report
+* Provide strengths and improvement suggestions
 
 ---
 
@@ -35,153 +56,207 @@ Store Candidate Information
 
 * FastAPI
 * Python
-
-### Database
-
-* SQLite
 * SQLAlchemy
+* SQLite
 
-### AI / LLM
+### AI / ML
 
 * LangChain
-* Groq
-* Llama 3.1 8B Instant
+* FAISS
+* HuggingFace Embeddings
+* Groq LLM
 
-### Document Processing
+### Frontend
 
-* PyMuPDF (fitz)
-
----
-
-## Database Schema
-
-### Candidate Table
-
-| Column      | Type    |
-| ----------- | ------- |
-| id          | Integer |
-| name        | String  |
-| email       | String  |
-| resume_path | String  |
-| resume_text | Text    |
-| skills      | Text    |
+* React (Planned)
 
 ---
 
 ## Project Structure
 
-```text
 backend/
-│
+
 ├── app/
-│   ├── api/
-│   │   └── candidate.py
-│   │
-│   ├── database/
-│   │   ├── database.py
-│   │   └── model.py
-│   │
-│   ├── services/
-│   │   ├── resume_service.py
-│   │   ├── skill_extraction_service.py
-│   │   └── llm_service.py
-│   │
-│   └── main.py
+
+│ ├── api/
+
+│ ├── database/
+
+│ ├── rag/
+
+│ ├── schema/
+
+│ ├── services/
+
+│ └── main.py
+
 │
-├── uploads/
-│
-├── interview.db
-│
+
+├── books/
+
+├── vector_store/
+
+├── requirements.txt
+
 └── README.md
+
+---
+
+## System Flow
+
+1. Upload Resume
+2. Extract Skills
+3. Select Role
+4. Start Interview Session
+5. Retrieve Knowledge Context using FAISS
+6. Generate Interview Questions
+7. Candidate Answers Questions
+8. Generate Follow-up Questions
+9. Store Responses
+10. Generate Interview Report
+
+---
+
+## Database Schema
+
+### Candidate
+
+| Field  | Type    |
+| ------ | ------- |
+| id     | Integer |
+| name   | String  |
+| skills | Text    |
+
+### Role
+
+| Field           | Type    |
+| --------------- | ------- |
+| id              | Integer |
+| role_name       | String  |
+| required_skills | Text    |
+
+### InterviewSession
+
+| Field        | Type        |
+| ------------ | ----------- |
+| id           | Integer     |
+| candidate_id | Foreign Key |
+| role_id      | Foreign Key |
+| status       | String      |
+
+### QuestionAnswer
+
+| Field      | Type        |
+| ---------- | ----------- |
+| id         | Integer     |
+| session_id | Foreign Key |
+| question   | Text        |
+| answer     | Text        |
+
+---
+
+## API Endpoints
+
+### Candidate
+
+* POST /upload_resume
+
+### Role
+
+* POST /create_role
+
+### Interview
+
+* POST /start-interview
+* GET /generate-question/{session_id}
+* POST /next-question
+* GET /interview/{session_id}
+* POST /end-interview/{session_id}
+* GET /session/{session_id}
+* GET /report/{session_id}
+
+---
+
+## Knowledge Base
+
+The system uses the following books as its primary knowledge source:
+
+* Machine Learning — Tom Mitchell
+* Machine Learning for Absolute Beginners
+* Introduction to Machine Learning with Python
+* Master Machine Learning Algorithms
+* Pattern Recognition and Machine Learning
+* Artificial Intelligence, Machine Learning and Deep Learning
+
+---
+
+## RAG Architecture
+
+Document PDFs
+↓
+Chunking
+↓
+Embeddings
+↓
+FAISS Vector Store
+↓
+Context Retrieval
+↓
+Question Generation
+
+---
+
+## Setup
+
+### Clone Repository
+
+```bash
+git clone <repository_url>
+cd Candidate-Screening-System/backend
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+### Activate Environment
+
+```bash
+.venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run Application
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### API Documentation
+
+```text
+http://127.0.0.1:8000/docs
 ```
 
 ---
 
-## API Endpoint
+## Future Improvements
 
-### Upload Resume
-
-**POST** `/upload_resume`
-
-#### Form Data
-
-| Field  | Type     |
-| ------ | -------- |
-| name   | String   |
-| email  | String   |
-| resume | PDF File |
-
-#### Response
-
-```json
-{
-  "candidate_id": 1,
-  "name": "John Doe",
-  "email": "john@example.com",
-  "skills": [
-    "Python",
-    "FastAPI",
-    "LangChain"
-  ]
-}
-```
-
----
-
-## Implemented Modules
-
-### Resume Service
-
-* PDF text extraction
-* Resume content processing
-
-### Skill Extraction Service
-
-* LLM-based technical skill extraction
-* Structured output using Pydantic
-
-### Candidate API
-
-* Resume upload endpoint
-* Candidate data processing
-
----
-
-## Roadmap
-
-### Phase 1 
-
-* Resume Upload
-* Resume Parsing
-* Skill Extraction
-* Candidate Storage
-
-### Phase 2
-
-* Role Table
-* InterviewSession Table
-* QuestionAnswer Table
-* FinalReport Table
-
-### Phase 3
-
-* Resume Skill vs Role Skill Comparison
-* Retrieval Query Generation
-
-### Phase 4
-
-* RAG Pipeline
-* FAISS Vector Database
-* Interview Question Generation
-
-### Phase 5
-
-* Adaptive Follow-up Questions
-* Candidate Evaluation
-* Final Interview Report
+* React Frontend
+* Candidate Scoring System
+* Multi-Round Interviews
+* Advanced Skill Gap Analysis
+* Interview Analytics Dashboard
 
 ---
 
 ## Author
 
-Subham Maharana
+Subham
