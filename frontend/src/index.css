@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-navy-900 text-slate-100 font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-navy-800;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-navy-600 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-indigo-500;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
+           bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl
+           transition-all duration-200 shadow-glow-indigo hover:shadow-lg
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
+           active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-navy-700 hover:bg-navy-600 text-slate-200 font-medium rounded-xl
+           border border-navy-600 hover:border-indigo-500
+           transition-all duration-200
+           disabled:opacity-40 disabled:cursor-not-allowed
+           active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-slate-400 hover:text-indigo-400 font-medium rounded-lg
+           transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-navy-800 border border-navy-700 rounded-2xl shadow-card;
+  }
+
+  .card-glow {
+    @apply card border-indigo-500/30 shadow-glow-indigo;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-navy-900 border border-navy-600 rounded-xl
+           text-slate-100 placeholder-slate-500
+           focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50
+           transition-colors duration-200 font-sans;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-slate-300 mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-white tracking-tight;
+  }
+
+  .section-sub {
+    @apply text-slate-400 text-sm mt-1;
+  }
+}
+
+/* Step rail glow pulse */
+@keyframes node-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(99,102,241,0.6); }
+  50% { box-shadow: 0 0 16px 4px rgba(99,102,241,0.9), 0 0 32px 8px rgba(99,102,241,0.3); }
+}
+
+.step-node-active {
+  animation: node-glow 2s ease-in-out infinite;
+}
+
+/* Textarea */
+textarea.input-field {
+  resize: none;
+}
