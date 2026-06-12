@@ -50,6 +50,26 @@ export const getReport = async (sessionId) => {
   return data
 }
 
+export const downloadReportPdf = async (sessionId) => {
+  const response = await api.get(`/report/${sessionId}/pdf`, {
+    responseType: 'blob',
+    timeout: 120000,
+  })
+
+  const contentType = response.headers['content-type'] || ''
+  if (response.status >= 400 || !contentType.includes('application/pdf')) {
+    const text = await response.data.text()
+    let message = 'Failed to download the PDF report.'
+    try {
+      const json = JSON.parse(text)
+      message = json.detail || message
+    } catch (_) {}
+    throw new Error(message)
+  }
+
+  return response
+}
+
 export const getSession = async (sessionId) => {
   const { data } = await api.get(`/session/${sessionId}`)
   return data

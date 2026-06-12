@@ -48,6 +48,8 @@ The system uploads and analyzes a candidate resume, extracts technical skills, l
 * Summarize candidate performance
 * Identify strengths, weaknesses, and knowledge gaps
 * Provide AI-generated evaluation feedback
+* View a structured recruiter-ready report in the app
+* Download the report as a PDF for sharing or record-keeping
 
 ---
 
@@ -68,6 +70,7 @@ The system uploads and analyzes a candidate resume, extracts technical skills, l
 * SQLAlchemy
 * SQLite
 * Uvicorn
+* ReportLab
 * uv
 
 ### AI / Machine Learning
@@ -128,6 +131,8 @@ Candidate-Screening-System/
 10. Flow continues with the next main question.
 11. Candidate ends the interview.
 12. Backend generates the final AI evaluation report.
+13. Frontend displays a structured evaluation summary.
+14. Candidate or recruiter can download the report as a PDF.
 
 ---
 
@@ -157,7 +162,8 @@ Candidate-Screening-System/
 | GET | `/interview/{session_id}` | Fetch interview Q&A history |
 | POST | `/end-interview/{session_id}` | Mark interview as completed |
 | GET | `/session/{session_id}` | Fetch interview session details |
-| GET | `/report/{session_id}` | Generate interview report |
+| GET | `/report/{session_id}` | Generate structured interview report |
+| GET | `/report/{session_id}/pdf` | Download interview report as PDF |
 
 ### Start Interview Request
 
@@ -205,6 +211,7 @@ Valid `experience_level` values:
 | id | Integer |
 | candidate_id | Foreign Key |
 | role_id | Foreign Key |
+| experience_level | String |
 | status | String |
 
 ### QuestionAnswer
@@ -342,11 +349,33 @@ HuggingFace may show a warning when running without `HF_TOKEN`. The app can stil
 
 ---
 
+## Report PDF Export
+
+After an interview is completed, the report page includes a **Download PDF Report** button.
+
+The PDF includes:
+
+* Candidate information (name, email, role, experience level, session ID, status)
+* Interview evaluation (overall rating, job eligibility, strengths, weaknesses, knowledge gaps, recommendations, and reason)
+
+The downloaded file is named in this format:
+
+```text
+CandidateName_Session_{session_id}_Report.pdf
+```
+
+Example:
+
+```text
+Arush_Session_1_Report.pdf
+```
+
+---
+
 ## Current Limitations
 
 * No separate admin frontend panel yet
 * Role creation and role deletion are available through backend APIs only
-* Reports are shown in the app but not exported as PDF yet
 
 ---
 
@@ -354,7 +383,6 @@ HuggingFace may show a warning when running without `HF_TOKEN`. The app can stil
 
 * Admin dashboard for role management
 * Candidate scoring system
-* PDF report export
 * Interview analytics dashboard
 * Multi-round interviews
 * Authentication for admin and candidate flows
