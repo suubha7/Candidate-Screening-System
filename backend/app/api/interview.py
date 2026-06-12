@@ -22,6 +22,7 @@ def start_interview(data: StartInterviewRequest):
     session = InterviewSession(
         candidate_id=data.candidate_id,
         role_id=data.role_id,
+        experience_level=data.experience_level,
         status="Started"
     )
 
@@ -83,6 +84,7 @@ def generate_first_question(session_id: int):
 
     questions = generate_questions(
         role=role.role_name,
+        experience_level=session.experience_level,
         resume_skills=candidate.skills.split(","),
         context=context
     )
@@ -191,6 +193,7 @@ def get_session(session_id: int):
         "session_id": session.id,
         "candidate_id": session.candidate_id,
         "role_id": session.role_id,
+        "experience_level": session.experience_level,
         "status": session.status
     }
 

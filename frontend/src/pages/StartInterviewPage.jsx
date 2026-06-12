@@ -6,6 +6,8 @@ import ErrorAlert from '../components/ErrorAlert'
 import { startInterview } from '../services/api'
 import { useSession } from '../context/SessionContext'
 
+const EXPERIENCE_LEVELS = ['Fresher', 'Associate', 'Senior']
+
 function InfoRow({ label, value, mono = false }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-navy-700 last:border-none">
@@ -19,12 +21,17 @@ export default function StartInterviewPage() {
   const navigate = useNavigate()
   const { session, update } = useSession()
 
+  const [experienceLevel, setExperienceLevel] = useState(session.experienceLevel || '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleStart = async () => {
     if (!session.candidateId || !session.roleId) {
       setError('Missing candidate or role. Please go back and complete the previous steps.')
+      return
+    }
+    if (!experienceLevel) {
+      setError('Please select an experience level before starting the interview.')
       return
     }
 
@@ -35,8 +42,9 @@ export default function StartInterviewPage() {
       const data = await startInterview({
         candidate_id: session.candidateId,
         role_id: session.roleId,
+        experience_level: experienceLevel,
       })
-      update({ sessionId: data.session_id, status: data.status })
+      update({ experienceLevel, sessionId: data.session_id, status: data.status })
       navigate('/interview')
     } catch (err) {
       setError(err?.response?.data?.detail || 'Failed to start interview session.')
@@ -59,6 +67,26 @@ export default function StartInterviewPage() {
           <InfoRow label="Candidate ID" value={session.candidateId} mono />
           <InfoRow label="Role" value={session.roleName || 'Unknown'} />
           <InfoRow label="Role ID" value={session.roleId} mono />
+          <InfoRow label="Experience Level" value={experienceLevel || 'Not selected'} />
+        </div>
+
+        <div className="card p-6">
+          <label className="label" htmlFor="experience-level">Experience Level</label>
+          <select
+            id="experience-level"
+            className="input-field"
+            value={experienceLevel}
+            onChange={(e) => {
+              setExperienceLevel(e.target.value)
+              update({ experienceLevel: e.target.value })
+            }}
+            required
+          >
+            <option value="">Select experience level</option>
+            {EXPERIENCE_LEVELS.map(level => (
+              <option key={level} value={level}>{level}</option>
+            ))}
+          </select>
         </div>
 
         {/* What to expect */}

@@ -8,6 +8,7 @@ export function SessionProvider({ children }) {
     candidateName: null,
     roleId: null,
     roleName: null,
+    experienceLevel: '',
     sessionId: null,
     status: null,
   })
@@ -18,6 +19,7 @@ export function SessionProvider({ children }) {
     candidateName: null,
     roleId: null,
     roleName: null,
+    experienceLevel: '',
     sessionId: null,
     status: null,
   })

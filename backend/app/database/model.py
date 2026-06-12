@@ -37,6 +37,7 @@ class InterviewSession(Base):
         Integer,
         ForeignKey("roles.id")
     )
+    experience_level = Column(String)
     status = Column(String)
 
 class QuestionAnswer(Base):

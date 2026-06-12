@@ -30,33 +30,45 @@ def _parse_questions(text: str) -> list[str]:
 
     return questions[:5]
 
-def generate_questions(role, resume_skills, context):
+def generate_questions(role, experience_level, resume_skills, context):
     llm = get_llm()
     messages = [
-    (
-        "system",
-        """
-        You are an expert technical interviewer.
-        Generate questions ONLY from the retrieved context.
-        Do not introduce topics that are not present in the context.
-        Return exactly 5 technical interview questions.
-        Return ONLY the questions.
-        Do not add an introduction.
-        Do not add explanations.
-        Do not combine multiple questions into one paragraph.
-        """
-    ),
-    (
-        "human",
-        f"""
-        Role: {role}
-        Candidate Skills:
-        {', '.join(resume_skills)}
-        Retrieved Context:
-        {context}
-        """
-    )
-]
+        (
+            "system",
+            """
+You are an expert technical interviewer.
+
+Generate questions ONLY from the retrieved context.
+
+Difficulty Rules:
+- Fresher: Basic concepts, definitions, fundamentals.
+- Associate: Practical implementation, tools, debugging, workflows.
+- Senior: System design, architecture, optimization, trade-offs, scalability.
+
+Return exactly 5 technical interview questions.
+
+Return ONLY the questions.
+Do not add introductions.
+Do not add explanations.
+Do not number the questions.
+Do not combine multiple questions into one paragraph.
+"""
+        ),
+        (
+            "human",
+            f"""
+Role: {role}
+
+Experience Level: {experience_level}
+
+Candidate Skills:
+{', '.join(resume_skills)}
+
+Retrieved Context:
+{context}
+"""
+        )
+    ]
 
     response = llm.invoke(messages)
 
