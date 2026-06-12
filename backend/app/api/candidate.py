@@ -42,6 +42,8 @@ async def upload_resume(
     db.close()
 
     return {
+        "id": candidate.id,
+        "candidate_id": candidate.id,
         "name": name,
         "email": email,
         "filename": resume.filename,

@@ -9,3 +9,5 @@ tempCodeRunnerFile.py
 test.py
 books/
 faiss_index/
+uvicorn.err.log
+uvicorn.log
